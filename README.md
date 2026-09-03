@@ -1,76 +1,176 @@
-# Task Manager API
+# Task Manager App
 
-A production-style REST API for managing tasks, built with FastAPI and PostgreSQL. Each user authenticates via JWT and only sees their own tasks.
+A full-stack task management application built with **FastAPI, PostgreSQL, React, and Vite**.
 
-## Features
+It provides user authentication, task CRUD operations, ownership-based authorization, database migrations, Docker support, and automated CI testing.
 
-- JWT authentication (signup, login, protected routes)
-- Full task CRUD, scoped per user
-- Mark tasks complete
-- Input validation and proper HTTP status codes (401, 404, 409, 422)
-- Database migrations with Alembic
-- Automated tests with Pytest
-- Dockerized, with CI running tests on every push
+## ✨ Features
 
-## Tech Stack
+* 🔐 JWT-based authentication
+* 👤 User registration and login
+* ✅ Create, read, update, and delete tasks
+* 🔒 User-specific task ownership and authorization
+* 🗄️ PostgreSQL database with SQLAlchemy
+* 🔄 Alembic database migrations
+* 🐳 Docker & Docker Compose backend
+* 🧪 Pytest test suite
+* ⚡ React + Vite frontend
+* 🔁 GitHub Actions CI
 
-FastAPI, PostgreSQL, SQLAlchemy 2.0, Alembic, JWT (python-jose), Passlib (bcrypt), Pytest, Docker, GitHub Actions
+## 🛠️ Tech Stack
 
-## API Endpoints
+| Area             | Technology      |
+| ---------------- | --------------- |
+| Frontend         | React, Vite     |
+| Backend          | Python, FastAPI |
+| Database         | PostgreSQL      |
+| ORM              | SQLAlchemy      |
+| Migrations       | Alembic         |
+| Authentication   | JWT             |
+| Testing          | Pytest          |
+| Containerization | Docker          |
+| CI               | GitHub Actions  |
 
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | /  | Welcome message | No |
-| GET | /health | Health check | No |
-| POST | /auth/signup | Create an account | No |
-| POST | /auth/login | Log in, returns a JWT | No |
-| GET | /auth/me | Current user info | Yes |
-| GET | /tasks | List your tasks | Yes |
-| GET | /tasks/{id} | Get a task | Yes |
-| POST | /tasks | Create a task | Yes |
-| PUT | /tasks/{id} | Update a task | Yes |
-| PATCH | /tasks/{id}/complete | Mark complete | Yes |
-| DELETE | /tasks/{id} | Delete a task | Yes |
+## 📁 Project Structure
 
-## Quick Start (Docker)
+```text
+task-manager-app/
+├── .github/
+│   └── workflows/
+│       └── tests.yml
+├── backend/
+│   ├── alembic/
+│   ├── app/
+│   ├── .env.example
+│   ├── Dockerfile
+│   ├── alembic.ini
+│   ├── docker-compose.yml
+│   └── requirements.txt
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   ├── .env.example
+│   ├── package.json
+│   └── vite.config.js
+├── tests/
+├── .gitignore
+└── README.md
+```
 
-    git clone https://github.com/parashbisht/task_manager_api.git
-    cd task_manager_api
-    cp .env.example .env
-    docker compose up --build
+## 🚀 Getting Started
 
-API runs at http://127.0.0.1:8000/docs
+### 1. Clone
 
-## Running Locally (without Docker)
+```bash
+git clone https://github.com/parashbisht/task-manager-app.git
+cd task-manager-app
+```
 
-    python3 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    sudo service postgresql start
-    sudo -u postgres psql -c "CREATE DATABASE task_manager;"
-    cp .env.example .env
-    python3 -c "import secrets; print(secrets.token_hex(32))"
-    alembic upgrade head
-    uvicorn app.main:app --reload
+### 2. Start the Backend
 
-## Running Tests
+```bash
+cd backend
+cp .env.example .env
+docker compose up
+```
 
-    pytest -v
+Backend:
 
-Tests run against a separate task_manager_test database. CI runs the same suite automatically on every push via GitHub Actions.
+```text
+http://localhost:8000
+```
 
-## Project Structure
+API documentation:
 
-    app/
-    main.py       - routes
-    config.py     - settings from .env
-    database.py   - SQLAlchemy engine/session
-    models.py     - User and Task ORM models
-    schemas.py    - Pydantic schemas
-    crud.py       - database operations
-    security.py   - password hashing, JWT
-    deps.py       - auth dependency
+```text
+http://localhost:8000/docs
+```
 
-    alembic/           - migrations
-    tests/             - pytest suite
-    .github/workflows/ - CI pipeline
+### 3. Start the Frontend
+
+Open a new terminal:
+
+```bash
+cd task-manager-app/frontend
+npm install
+cp .env.example .env
+npm run dev
+```
+
+Frontend:
+
+```text
+http://localhost:5173
+```
+
+## 🧪 Testing
+
+Run the test suite from the project root:
+
+```bash
+pytest -v
+```
+
+Tests are also automatically executed through **GitHub Actions** on pushes and pull requests targeting `main`.
+
+## 🗄️ Database Migrations
+
+From the `backend` directory:
+
+```bash
+alembic upgrade head
+```
+
+Create a new migration:
+
+```bash
+alembic revision --autogenerate -m "describe change"
+```
+
+## 🔐 Environment Variables
+
+Environment files are not committed to Git.
+
+Use the provided examples:
+
+```text
+backend/.env.example
+frontend/.env.example
+```
+
+Create local `.env` files and configure them for your environment.
+
+## 🐳 Docker
+
+From `backend/`:
+
+```bash
+docker compose up
+```
+
+Stop services:
+
+```bash
+docker compose down
+```
+
+Rebuild:
+
+```bash
+docker compose up --build
+```
+
+## 📌 Status
+
+* ✅ Full-stack application
+* ✅ Authentication & authorization
+* ✅ Task CRUD
+* ✅ PostgreSQL integration
+* ✅ Database migrations
+* ✅ Dockerized backend
+* ✅ Automated testing
+* ✅ GitHub Actions CI
+
+## 📄 License
+
+This project is intended for learning, development, and portfolio purposes.
