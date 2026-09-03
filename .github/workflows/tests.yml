@@ -35,11 +35,11 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r backend/requirements.txt
 
       - name: Run tests
         env:
           DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/task_manager_test
           SECRET_KEY: test-secret-key-for-ci
           ACCESS_TOKEN_EXPIRE_MINUTES: 60
-        run: pytest -v
+        run: PYTHONPATH=backend pytest -v
