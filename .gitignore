@@ -1,4 +1,40 @@
-ghost/
-__pycache__/
-*.pyc
+# Environment variables
 .env
+*.env
+backend/.env
+frontend/.env
+
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+alpha/
+backend/alpha/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Frontend builds & dependencies
+node_modules/
+dist/
+dist-ssr/
+frontend/dist/
+frontend/node_modules/
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+ghost/

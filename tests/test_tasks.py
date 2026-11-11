@@ -32,6 +32,30 @@ def test_list_tasks(client, auth_headers):
     assert len(response.json()) == 2
 
 
+def test_list_tasks_pagination_and_completion_filter(client, auth_headers):
+    task_ids = []
+    for title in ("First task", "Second task", "Third task"):
+        response = client.post(
+            "/tasks", json={"title": title}, headers=auth_headers
+        )
+        task_ids.append(response.json()["id"])
+    client.patch(f"/tasks/{task_ids[1]}/complete", headers=auth_headers)
+
+    page_response = client.get("/tasks?skip=1&limit=1", headers=auth_headers)
+    filtered_response = client.get("/tasks?completed=true", headers=auth_headers)
+
+    assert page_response.status_code == 200
+    assert [task["id"] for task in page_response.json()] == [task_ids[1]]
+    assert filtered_response.status_code == 200
+    assert [task["id"] for task in filtered_response.json()] == [task_ids[1]]
+
+
+def test_versioned_task_route_is_available(client, auth_headers):
+    response = client.get("/api/v1/tasks", headers=auth_headers)
+
+    assert response.status_code == 200
+
+
 def test_get_task_by_id(client, auth_headers):
     created = client.post(
         "/tasks", json={"title": "Find me"}, headers=auth_headers

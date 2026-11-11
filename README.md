@@ -86,6 +86,9 @@ API documentation:
 http://localhost:8000/docs
 ```
 
+API endpoints are available under `/api/v1` (for example, `/api/v1/tasks`). The
+original unversioned paths remain available for existing clients.
+
 ### 3. Start the Frontend
 
 Open a new terminal:
@@ -138,7 +141,8 @@ backend/.env.example
 frontend/.env.example
 ```
 
-Create local `.env` files and configure them for your environment.
+Create local `.env` files and configure them for your environment. The backend
+uses `CORS_ORIGINS` as a comma-separated list of allowed frontend origins.
 
 ## 🐳 Docker
 

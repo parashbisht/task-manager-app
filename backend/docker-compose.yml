@@ -29,6 +29,7 @@ services:
       DEBUG: ${DEBUG}
       SECRET_KEY: ${SECRET_KEY}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+      CORS_ORIGINS: ${CORS_ORIGINS}
     ports:
       - "8000:8000"
     command: >

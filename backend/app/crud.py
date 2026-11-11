@@ -22,10 +22,24 @@ def create_user(db: Session, user_data: UserCreate) -> User:
     return user
 
 
-def get_all_tasks(db: Session, owner_id: int) -> list[Task]:
-    result = db.execute(
-        select(Task).where(Task.owner_id == owner_id).order_by(Task.id)
-    )
+def get_all_tasks(
+    db: Session,
+    owner_id: int,
+    skip: int = 0,
+    limit: int = 100,
+    completed: bool | None = None,
+    search: str | None = None,
+) -> list[Task]:
+    query = select(Task).where(Task.owner_id == owner_id)
+    if completed is not None:
+        query = query.where(Task.completed == completed)
+    if search:
+        search_filter = f"%{search}%"
+        query = query.where(
+            (Task.title.ilike(search_filter)) | (Task.description.ilike(search_filter))
+        )
+    query = query.order_by(Task.id).offset(skip).limit(limit)
+    result = db.execute(query)
     return list(result.scalars().all())
 
 

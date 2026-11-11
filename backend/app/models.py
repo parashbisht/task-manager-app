@@ -35,6 +35,6 @@ class Task(Base):
         onupdate=func.now(),
         nullable=False,
     )
-    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
 
     owner: Mapped["User"] = relationship(back_populates="tasks")
