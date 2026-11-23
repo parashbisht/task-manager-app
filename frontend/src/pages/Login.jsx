@@ -40,9 +40,25 @@ export default function Login() {
     }
   }
 
-  function handleDemoLogin() {
+  async function handleDemoLogin() {
     setEmail('demo@taskflow.com')
     setPassword('demo1234')
+    setError('')
+    setLoading(true)
+    try {
+      const data = await loginRequest('demo@taskflow.com', 'demo1234')
+      login(data.access_token)
+      navigate('/dashboard')
+    } catch (err) {
+      const status = err.response?.status
+      if (status === 401) {
+        setError('Incorrect email or password.')
+      } else {
+        setError('Something went wrong. Please try again.')
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

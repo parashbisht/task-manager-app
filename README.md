@@ -3,14 +3,12 @@
 A full-stack task management application built with Python FastAPI, PostgreSQL, React, and Vite.
 
 ## Features
-
 - JWT-based authentication
 - User registration and login
 - Create, read, update, and delete tasks
 - User-specific task ownership and authorization
 - PostgreSQL database with SQLAlchemy
 - Alembic database migrations
-- Docker and Docker Compose support
 - Pytest test suite
 - React + Vite frontend
 
@@ -25,7 +23,6 @@ A full-stack task management application built with Python FastAPI, PostgreSQL, 
 | Migrations | Alembic |
 | Authentication | JWT |
 | Testing | Pytest |
-| Containerization | Docker |
 | CI | GitHub Actions |
 
 ## Project Structure
@@ -35,8 +32,6 @@ task-manager-app/
 +-- backend/          # FastAPI backend
 |   +-- app/          # Application source code
 |   +-- alembic/      # Database migrations
-|   +-- Dockerfile
-|   +-- docker-compose.yml
 |   +-- requirements.txt
 +-- frontend/         # React Vite frontend
 |   +-- src/          # Source files
@@ -56,34 +51,27 @@ git clone https://github.com/parashbisht/task-manager-app.git
 cd task-manager-app
 ```
 
-### 2. Start the backend
+### 2. Backend (.venv)
 
 ```bash
-cd backend
-cp .env.example .env
-# Edit .env if needed (default uses PostgreSQL via Docker)
-docker compose up -d
-# Wait for DB to be ready, then run migrations:
-alembic upgrade head
-# Start the development server:
-uvicorn app.main:app --reload
-# API available at http://localhost:8000
-# Docs at http://localhost:8000/docs
+python -m venv .venv
+. .venv\Scripts\activate
+pip install -r backend/requirements.txt
+cp backend/.env.example backend/.env
+edit backend/.env if needed
+python -m app.main
 ```
 
-### 3. Start the frontend
+### 3. Frontend (Vite)
 
 ```bash
 cd frontend
 npm install
-cp .env.example .env
+cp frontend/.env.example frontend/.env
 npm run dev
-# Frontend available at http://localhost:5173
 ```
 
 ### 4. Running tests
-
-From the project root:
 
 ```bash
 pytest
@@ -116,31 +104,21 @@ All endpoints are under /api/v1:
 
 ## Demo Credentials
 
-- Email: demo@taskflow.com
-- Password: demo1234
+- Email: `demo@taskflow.com`
+- Password: `demo1234`
 
-Use the Demo Login button on the login page to auto-fill these credentials.
-
-## Docker
-
-From the backend/ directory:
-
-```bash
-docker compose up       # Start services
-docker compose down     # Stop services
-docker compose up --build  # Rebuild and start
-```
+Use the Demo Login button on the login page to authenticate.
 
 ## Environment Variables
 
 Backend (backend/.env):
-- DATABASE_URL - PostgreSQL connection string
-- SECRET_KEY - JWT signing key
-- DEBUG - Enable debug mode
-- CORS_ORIGINS - Comma-separated allowed frontend origins
+- `DATABASE_URL` - PostgreSQL connection string
+- `SECRET_KEY` - JWT signing key
+- `DEBUG` - Enable debug mode
+- `CORS_ORIGINS` - Comma-separated allowed frontend origins
 
 Frontend (frontend/.env):
-- VITE_API_BASE_URL - Backend API base URL (default: http://localhost:8000)
+- `VITE_API_BASE_URL` - Backend API base URL (default: `http://localhost:8000`)
 
 ## License
 
