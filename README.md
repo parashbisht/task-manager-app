@@ -1,180 +1,147 @@
 # Task Manager App
 
-A full-stack task management application built with **FastAPI, PostgreSQL, React, and Vite**.
+A full-stack task management application built with Python FastAPI, PostgreSQL, React, and Vite.
 
-It provides user authentication, task CRUD operations, ownership-based authorization, database migrations, Docker support, and automated CI testing.
+## Features
 
-## ✨ Features
+- JWT-based authentication
+- User registration and login
+- Create, read, update, and delete tasks
+- User-specific task ownership and authorization
+- PostgreSQL database with SQLAlchemy
+- Alembic database migrations
+- Docker and Docker Compose support
+- Pytest test suite
+- React + Vite frontend
 
-* 🔐 JWT-based authentication
-* 👤 User registration and login
-* ✅ Create, read, update, and delete tasks
-* 🔒 User-specific task ownership and authorization
-* 🗄️ PostgreSQL database with SQLAlchemy
-* 🔄 Alembic database migrations
-* 🐳 Docker & Docker Compose backend
-* 🧪 Pytest test suite
-* ⚡ React + Vite frontend
-* 🔁 GitHub Actions CI
+## Technology Stack
 
-## 🛠️ Tech Stack
+| Area | Technology |
+|------|------------|
+| Frontend | React, Vite |
+| Backend | Python, FastAPI |
+| Database | PostgreSQL |
+| ORM | SQLAlchemy |
+| Migrations | Alembic |
+| Authentication | JWT |
+| Testing | Pytest |
+| Containerization | Docker |
+| CI | GitHub Actions |
 
-| Area             | Technology      |
-| ---------------- | --------------- |
-| Frontend         | React, Vite     |
-| Backend          | Python, FastAPI |
-| Database         | PostgreSQL      |
-| ORM              | SQLAlchemy      |
-| Migrations       | Alembic         |
-| Authentication   | JWT             |
-| Testing          | Pytest          |
-| Containerization | Docker          |
-| CI               | GitHub Actions  |
-
-## 📁 Project Structure
+## Project Structure
 
 ```text
 task-manager-app/
-├── .github/
-│   └── workflows/
-│       └── tests.yml
-├── backend/
-│   ├── alembic/
-│   ├── app/
-│   ├── .env.example
-│   ├── Dockerfile
-│   ├── alembic.ini
-│   ├── docker-compose.yml
-│   └── requirements.txt
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   ├── .env.example
-│   ├── package.json
-│   └── vite.config.js
-├── tests/
-├── .gitignore
-└── README.md
++-- backend/          # FastAPI backend
+|   +-- app/          # Application source code
+|   +-- alembic/      # Database migrations
+|   +-- Dockerfile
+|   +-- docker-compose.yml
+|   +-- requirements.txt
++-- frontend/         # React Vite frontend
+|   +-- src/          # Source files
+|   +-- package.json
+|   +-- vite.config.js
++-- tests/            # Pytest test suite
++-- .gitignore
++-- README.md
 ```
 
-## 🚀 Getting Started
+## Local Setup
 
-### 1. Clone
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/parashbisht/task-manager-app.git
 cd task-manager-app
 ```
 
-### 2. Start the Backend
+### 2. Start the backend
 
 ```bash
 cd backend
 cp .env.example .env
-docker compose up
+# Edit .env if needed (default uses PostgreSQL via Docker)
+docker compose up -d
+# Wait for DB to be ready, then run migrations:
+alembic upgrade head
+# Start the development server:
+uvicorn app.main:app --reload
+# API available at http://localhost:8000
+# Docs at http://localhost:8000/docs
 ```
 
-Backend:
-
-```text
-http://localhost:8000
-```
-
-API documentation:
-
-```text
-http://localhost:8000/docs
-```
-
-API endpoints are available under `/api/v1` (for example, `/api/v1/tasks`). The
-original unversioned paths remain available for existing clients.
-
-### 3. Start the Frontend
-
-Open a new terminal:
+### 3. Start the frontend
 
 ```bash
-cd task-manager-app/frontend
+cd frontend
 npm install
 cp .env.example .env
 npm run dev
+# Frontend available at http://localhost:5173
 ```
 
-Frontend:
+### 4. Running tests
 
-```text
-http://localhost:5173
-```
-
-## 🧪 Testing
-
-Run the test suite from the project root:
+From the project root:
 
 ```bash
-pytest -v
+pytest
 ```
 
-Tests are also automatically executed through **GitHub Actions** on pushes and pull requests targeting `main`.
+Tests use an in-memory SQLite database by default. To use a dedicated test database, set the TEST_DATABASE_URL environment variable.
 
-## 🗄️ Database Migrations
+## API Endpoints
 
-From the `backend` directory:
+All endpoints are under /api/v1:
+
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/v1/auth/signup | Register a new user |
+| POST | /api/v1/auth/login | Authenticate and get access token |
+| GET | /api/v1/auth/me | Get current user profile |
+
+### Tasks
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/v1/tasks | List all tasks for the current user |
+| POST | /api/v1/tasks | Create a new task |
+| GET | /api/v1/tasks/{task_id} | Get a specific task |
+| PUT | /api/v1/tasks/{task_id} | Update an existing task |
+| PATCH | /api/v1/tasks/{task_id}/complete | Mark a task as completed |
+| DELETE | /api/v1/tasks/{task_id} | Delete a task |
+
+## Demo Credentials
+
+- Email: demo@taskflow.com
+- Password: demo1234
+
+Use the Demo Login button on the login page to auto-fill these credentials.
+
+## Docker
+
+From the backend/ directory:
 
 ```bash
-alembic upgrade head
+docker compose up       # Start services
+docker compose down     # Stop services
+docker compose up --build  # Rebuild and start
 ```
 
-Create a new migration:
+## Environment Variables
 
-```bash
-alembic revision --autogenerate -m "describe change"
-```
+Backend (backend/.env):
+- DATABASE_URL - PostgreSQL connection string
+- SECRET_KEY - JWT signing key
+- DEBUG - Enable debug mode
+- CORS_ORIGINS - Comma-separated allowed frontend origins
 
-## 🔐 Environment Variables
+Frontend (frontend/.env):
+- VITE_API_BASE_URL - Backend API base URL (default: http://localhost:8000)
 
-Environment files are not committed to Git.
-
-Use the provided examples:
-
-```text
-backend/.env.example
-frontend/.env.example
-```
-
-Create local `.env` files and configure them for your environment. The backend
-uses `CORS_ORIGINS` as a comma-separated list of allowed frontend origins.
-
-## 🐳 Docker
-
-From `backend/`:
-
-```bash
-docker compose up
-```
-
-Stop services:
-
-```bash
-docker compose down
-```
-
-Rebuild:
-
-```bash
-docker compose up --build
-```
-
-## 📌 Status
-
-* ✅ Full-stack application
-* ✅ Authentication & authorization
-* ✅ Task CRUD
-* ✅ PostgreSQL integration
-* ✅ Database migrations
-* ✅ Dockerized backend
-* ✅ Automated testing
-* ✅ GitHub Actions CI
-
-## 📄 License
+## License
 
 This project is intended for learning, development, and portfolio purposes.

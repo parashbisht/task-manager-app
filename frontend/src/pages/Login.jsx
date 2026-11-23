@@ -40,6 +40,11 @@ export default function Login() {
     }
   }
 
+  function handleDemoLogin() {
+    setEmail('demo@taskflow.com')
+    setPassword('demo1234')
+  }
+
   return (
     <AuthCard title="Welcome back" subtitle="Log in to manage your tasks">
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -67,6 +72,14 @@ export default function Login() {
         <Button type="submit" loading={loading} className="w-full">
           Log in
         </Button>
+
+        <button
+          onClick={handleDemoLogin}
+          className="w-full text-sm text-brand-600 hover:text-brand-700 underline mt-2"
+          disabled={loading}
+        >
+          Demo Login (demo@taskflow.com / demo1234)
+        </button>
       </form>
 
       <p className="mt-5 text-center text-sm text-ink-500">
